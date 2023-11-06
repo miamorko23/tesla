@@ -57,7 +57,7 @@ WSGI_APPLICATION = 'tesla.wsgi.application'
 
 DATABASES = {}
 
-DATABASES['default'] = dj_database_url.parse('postgres://miamorko23_user:jsUL6Rbb6Ce1ZTopxZUtHO2hylVQIFA5@dpg-ckn0mf91rp3c73epu630-a.singapore-postgres.render.com/miamorko23')
+DATABASES['default'] = dj_database_url.parse('postgres://miamorko23_user:jsUL6Rbb6Ce1ZTopxZUtHO2hylVQIFA5@dpg-ckn0mf91rp3c73epu630-a/miamorko23')
 
 AUTH_PASSWORD_VALIDATORS = [
     {
