@@ -1,13 +1,17 @@
+import environ
 import dj_database_url
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env()
+environ.Env.read_env()
+
 SECRET_KEY = 'django-insecure-9npc35e5)-3nog*zd4l((=f%hrd2sjgzv#x5=3tr=k-(^_tm*+'
 
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -57,7 +61,7 @@ WSGI_APPLICATION = 'tesla.wsgi.application'
 
 DATABASES = {}
 
-DATABASES['default'] = dj_database_url.parse('postgres://miamorko23_user:jsUL6Rbb6Ce1ZTopxZUtHO2hylVQIFA5@dpg-ckn0mf91rp3c73epu630-a.singapore-postgres.render.com/miamorko23')
+DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
 
 AUTH_PASSWORD_VALIDATORS = [
     {
