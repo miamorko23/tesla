@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import secrets
 
 
 class Post(models.Model):
@@ -11,3 +12,24 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title + "\n" + self.description
+    
+class UserWithKey(User):
+    secret_key = models.CharField(max_length=100, default=secrets.token_hex(16))
+
+# class DrowsinessEvent(models.Model):
+#     user = models.ForeignKey(UserWithKey, on_delete=models.CASCADE)
+#     time = models.DateTimeField(auto_now_add=True)
+
+class DrowsinessEvent(models.Model):
+    STATUS_CHOICES = [
+        ('W', 'Warning'),
+        ('C', 'Critical'),
+        ('B', 'Brake Activation'),
+        ('AW', 'Alert from Warning'),
+        ('AC', 'Alert from Critical'),
+        ('AB', 'Alert from Brake Activation'),
+    ]
+
+    user = models.ForeignKey(UserWithKey, on_delete=models.CASCADE)
+    time = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='W')
