@@ -47,3 +47,17 @@ def sign_up(request):
         form = RegisterForm()
 
     return render(request, 'registration/sign_up.html', {"form": form})
+
+
+# FOR AI
+
+# from your_django_app.models import UserWithKey, DrowsinessEvent
+
+# def record_drowsiness_event(secret_key, status):
+#     try:
+#         user = UserWithKey.objects.get(secret_key=secret_key)
+#     except UserWithKey.DoesNotExist:
+#         print("Invalid secret key")
+#         return
+
+#     DrowsinessEvent.objects.create(user=user, status=status)
