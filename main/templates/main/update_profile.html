@@ -1,6 +1,6 @@
 {% extends 'main/base.html' %} {% block title %}Update Profile{% endblock %} 
 {% block content %}
-<form method="post">
+<form method="post" style="border: 1px solid #ccc; padding: 20px; margin-bottom: 10px;">
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit" class="btn btn-success">Update</button>
