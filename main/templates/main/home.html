@@ -1,4 +1,14 @@
-{% extends 'main/base.html' %} {% block title %}Hombre Page{% endblock %} 
+{% extends 'main/base.html' %} {% block title %}Home Page{% endblock %} 
 {% block content %}
-<p>RANARA</p>
+<h1>User Events</h1>
+<div style="width: 80%; margin: auto;">
+{% for event in user_events %}
+  <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+    <h2>{{ event.get_status_display }}</h2>
+    <p>Time: {{ event.time }}</p>
+  </div>
+{% empty %}
+  <p>No events found.</p>
+{% endfor %}
+</div>
 {% endblock %}
