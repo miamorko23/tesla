@@ -5,8 +5,7 @@ from django.contrib.auth import login
 from .models import UserWithKey
 from django.contrib.auth.decorators import login_required
 from .models import DrowsinessEvent
-from django.contrib.auth.decorators import user_passes_test #~
-from django.http import HttpResponse #~
+from django.contrib.auth.decorators import user_passes_test
 from django.core.paginator import Paginator
 
 
@@ -30,34 +29,29 @@ def update_profile(request):
         form.fields.pop('password', None)
         form.fields.pop('password1', None)
         form.fields.pop('password2', None)
-
     return render(request, 'main/update_profile.html', {'form': form})
 
 
 @login_required(login_url="/login")
-def home(request):
-    if request.user.is_authenticated:
-        user_with_key = UserWithKey.objects.get(pk=request.user.pk)
-        if user_with_key.is_manager and user_with_key.is_manager_approved:
-            all_user_events = DrowsinessEvent.objects.all()
-
-            # Filter by driver if specified
-            driver_id = request.GET.get('driver')
-            if driver_id:
-                all_user_events = all_user_events.filter(user__id=driver_id)
-
-            # Paginate the events
-            paginator = Paginator(all_user_events, 10)  # Show 10 events per page
-            page_number = request.GET.get('page')
-            events = paginator.get_page(page_number)
-
-            # Get all drivers
-            all_drivers = UserWithKey.objects.filter(is_manager=False)
-
-            return render(request, 'main/all_user_events.html', {'events': events, 'all_drivers': all_drivers})
-        else:
-            user_events = DrowsinessEvent.objects.filter(user=request.user)
-            return render(request, 'main/home.html', {'user_events': user_events})
+def home(request):    
+    if request.user.is_superuser or UserWithKey.objects.filter(pk=request.user.pk, is_manager=True, is_manager_approved=True).exists():
+        all_user_events = DrowsinessEvent.objects.all()
+        # Filter by driver if specified
+        driver_id = request.GET.get('driver')
+        if driver_id:
+            all_user_events = all_user_events.filter(user__id=driver_id)
+        # Paginate the events
+        paginator = Paginator(all_user_events, 10)  # Show 10 events per page
+        page_number = request.GET.get('page')
+        events = paginator.get_page(page_number)
+        # Get all drivers
+        all_drivers = UserWithKey.objects.filter(is_manager=False)
+        if request.user.is_superuser:
+            return render(request, 'main/superuser_dashboard.html', {'events': events, 'all_drivers': all_drivers})
+        return render(request, 'main/all_user_events.html', {'events': events, 'all_drivers': all_drivers})
+    else:
+        user_events = DrowsinessEvent.objects.filter(user=request.user)
+        return render(request, 'main/home.html', {'user_events': user_events})
 
 
 def sign_up(request):
@@ -78,13 +72,11 @@ def sign_up(request):
                 user.is_manager_approved = False
                 user.is_active = False
                 user.save()
-                return HttpResponse("Pending Manager Account I")
             user.save()
             login(request, user)
             return redirect('/home')
     else:
         form = RegisterForm()
-
     return render(request, 'registration/sign_up.html', {"form": form})
 
 

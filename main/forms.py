@@ -8,7 +8,6 @@ class RegisterForm(UserCreationForm):
     last_name = forms.CharField(max_length=30)
     address = forms.CharField(max_length=255, required=False)
     phone_number = forms.CharField(max_length=15, required=False)
-    #~
     request_manager = forms.BooleanField(label='Request Manager Status', required=False)
 
     class Meta:

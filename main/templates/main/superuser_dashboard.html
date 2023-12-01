@@ -1,8 +1,15 @@
 {% extends 'main/base.html' %}
-{% block title %}All User Events{% endblock %}
+{% block title %}Superuser Dashboard{% endblock %}
 {% block content %}
+<div class="mt-4">
+    <h1 class="mb-3">Superuser Dashboard</h1>
+    <div class="list-group">
+        <a href="{% url 'manager_approval' %}" class="list-group-item list-group-item-action">Pending Manager Approvals</a>
+        <a href="{% url 'approved_managers' %}" class="list-group-item list-group-item-action">Approved Managers</a>
+    </div>
+</div>
 <div class="container mt-4">
-    <h1 class="mb-4">All User Events</h1>
+    <h3 class="mb-4">All User Events</h3>
 
     <!-- Filter form -->
     <form method="get" class="mb-4">
