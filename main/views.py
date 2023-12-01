@@ -5,6 +5,10 @@ from django.contrib.auth import login
 from .models import UserWithKey
 from django.contrib.auth.decorators import login_required
 from .models import DrowsinessEvent
+from django.contrib.auth.decorators import user_passes_test #~
+from django.http import HttpResponse #~
+from django.core.paginator import Paginator
+
 
 @login_required(login_url="/login")
 def user_events(request):
@@ -23,11 +27,38 @@ def update_profile(request):
             return redirect('/home')
     else:
         form = UpdateProfileForm(initial={'address': request.user.userwithkey.address, 'phone_number': request.user.userwithkey.phone_number}, instance=request.user)
+        form.fields.pop('password', None)
+        form.fields.pop('password1', None)
+        form.fields.pop('password2', None)
+
     return render(request, 'main/update_profile.html', {'form': form})
 
+
+@login_required(login_url="/login")
 def home(request):
-    user_events = DrowsinessEvent.objects.filter(user=request.user)
-    return render(request, 'main/home.html', {'user_events': user_events})
+    if request.user.is_authenticated:
+        user_with_key = UserWithKey.objects.get(pk=request.user.pk)
+        if user_with_key.is_manager and user_with_key.is_manager_approved:
+            all_user_events = DrowsinessEvent.objects.all()
+
+            # Filter by driver if specified
+            driver_id = request.GET.get('driver')
+            if driver_id:
+                all_user_events = all_user_events.filter(user__id=driver_id)
+
+            # Paginate the events
+            paginator = Paginator(all_user_events, 10)  # Show 10 events per page
+            page_number = request.GET.get('page')
+            events = paginator.get_page(page_number)
+
+            # Get all drivers
+            all_drivers = UserWithKey.objects.filter(is_manager=False)
+
+            return render(request, 'main/all_user_events.html', {'events': events, 'all_drivers': all_drivers})
+        else:
+            user_events = DrowsinessEvent.objects.filter(user=request.user)
+            return render(request, 'main/home.html', {'user_events': user_events})
+
 
 def sign_up(request):
     if request.method == 'POST':
@@ -39,9 +70,15 @@ def sign_up(request):
                 email=form.cleaned_data['email'],
                 first_name=form.cleaned_data['first_name'],
                 last_name=form.cleaned_data['last_name'],
+                address=form.cleaned_data['address'],
+                phone_number=form.cleaned_data['phone_number']
             )
-            user.address = form.cleaned_data['address']
-            user.phone_number = form.cleaned_data['phone_number']
+            if form.cleaned_data['request_manager']:
+                user.is_manager = True
+                user.is_manager_approved = False
+                user.is_active = False
+                user.save()
+                return HttpResponse("Pending Manager Account I")
             user.save()
             login(request, user)
             return redirect('/home')
@@ -49,3 +86,23 @@ def sign_up(request):
         form = RegisterForm()
 
     return render(request, 'registration/sign_up.html', {"form": form})
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def manager_approval(request):
+    pending_requests = UserWithKey.objects.filter(is_manager=True, is_manager_approved=False)
+    return render(request, 'main/manager_approval.html', {'pending_requests': pending_requests})
+
+
+def approve_manager(request, user_id):
+    request.user = UserWithKey.objects.get(pk=user_id)
+    request.user.is_manager_approved = True
+    request.user.is_active = True
+    request.user.save()
+    return redirect('manager_approval')
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def approved_managers(request):
+    approved_managers = UserWithKey.objects.filter(is_manager=True, is_manager_approved=True)
+    return render(request, 'main/approved_managers.html', {'approved_managers': approved_managers})

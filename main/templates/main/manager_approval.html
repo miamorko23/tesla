@@ -1,0 +1,12 @@
+<h1>Pending Manager Approvals</h1>
+<ul>
+{% for user in pending_requests %}
+    <li>
+        {{ user.username }} - {{ user.email }}
+        <form method="post" action="{% url 'approve_manager' user.id %}">
+            {% csrf_token %}
+            <input type="submit" value="Approve">
+        </form>
+    </li>
+{% endfor %}
+</ul>

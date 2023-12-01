@@ -1,0 +1,49 @@
+{% extends 'main/base.html' %} 
+{% block title %}All User Events{% endblock %} 
+{% block content %}
+<h1>All User Events</h1>
+
+<!-- Filter form -->
+<form method="get">
+    <label for="driver">Driver:</label>
+    <select name="driver" id="driver">
+        <option value="">All</option>
+        {% for driver in all_drivers %}
+            <option value="{{ driver.id }}" {% if driver.id == selected_driver %}selected{% endif %}>{{ driver.username }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Filter">
+</form>
+
+<div style="width: 80%; margin: auto;">
+{% for event in events %}
+  <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+    <h2>{{ event.get_status_display }}</h2>
+    <p>Time: {{ event.time }}</p>
+    <p>User: {{ event.user.username }}</p>
+  </div>
+{% empty %}
+  <p>No events found.</p>
+{% endfor %}
+</div>
+
+<!-- Pagination -->
+<div class="pagination">
+    <span class="step-links">
+        {% if events.has_previous %}
+            <a href="?page=1">« first</a>
+            <a href="?page={{ events.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ events.number }} of {{ events.paginator.num_pages }}.
+        </span>
+
+        {% if events.has_next %}
+            <a href="?page={{ events.next_page_number }}">next</a>
+            <a href="?page={{ events.paginator.num_pages }}">last »</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock %}

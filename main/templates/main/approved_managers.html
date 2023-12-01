@@ -1,0 +1,8 @@
+<h1>Approved Managers</h1>
+<ul>
+{% for manager in approved_managers %}
+    <li>{{ manager.username }} - {{ manager.email }}</li>
+{% empty %}
+    <li>No approved managers found.</li>
+{% endfor %}
+</ul>
