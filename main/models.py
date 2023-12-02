@@ -28,9 +28,7 @@ class DrowsinessEvent(models.Model):
         ('W', 'Warning'),
         ('C', 'Critical'),
         ('B', 'Brake Activation'),
-        ('AW', 'Alert from Warning'),
-        ('AC', 'Alert from Critical'),
-        ('AB', 'Alert from Brake Activation'),
+        ('BD', 'Brake Deactivated'),
     ]
 
     user = models.ForeignKey(UserWithKey, on_delete=models.CASCADE)
