@@ -37,7 +37,7 @@ def update_profile(request):
 @login_required(login_url="/login")
 def home(request):    
     if request.user.is_superuser or UserWithKey.objects.filter(pk=request.user.pk, is_manager=True, is_manager_approved=True).exists():
-        all_user_events = DrowsinessEvent.objects.all()
+        all_user_events = DrowsinessEvent.objects.all().order_by('-time')
         # Filter by driver if specified
         driver_id = request.GET.get('driver')
         if driver_id:
