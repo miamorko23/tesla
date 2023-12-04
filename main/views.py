@@ -25,6 +25,8 @@ def update_profile(request):
             request.user.userwithkey.save()
             return redirect('/home')
     else:
+        if request.user.is_superuser:
+            return redirect('/home')
         form = UpdateProfileForm(initial={'address': request.user.userwithkey.address, 'phone_number': request.user.userwithkey.phone_number}, instance=request.user)
         form.fields.pop('password', None)
         form.fields.pop('password1', None)
