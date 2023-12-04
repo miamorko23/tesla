@@ -1,8 +1,19 @@
-{% extends 'main/base.html' %} {% block title %}Sign Up{% endblock %} 
-{% load crispy_forms_tags %} {% block content %}
-<form method="post">
-  {% csrf_token %}{{form|crispy}}
-  <p>Have an account? Login <a href="/login">Here</a>!</p>
-  <button type="submit" class="btn btn-success">Register</button>
-</form>
+{% extends 'main/base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="form-container">
+  <h2><i class="fas fa-user-plus"></i> Sign Up</h2>
+  <form method="post" class="signup-form">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div class="login-link">
+      <p>Have an account? Login <a href="{% url 'login' %}">Here</a>!</p>
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+  </form>
+</div>
 {% endblock %}

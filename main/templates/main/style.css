@@ -1,0 +1,69 @@
+/* General Styles */
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background: #f4f7f6;
+  color: #333;
+}
+
+/* Navbar Styles */
+.navbar-brand {
+  font-weight: bold;
+  color: #007bff !important;
+}
+
+/* Form Styles */
+.form-container {
+  background: #fff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: auto;
+  margin-top: 50px;
+}
+
+.form-container h2 {
+  margin-bottom: 20px;
+}
+
+.form-container input,
+.form-container textarea,
+.form-container select {
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-container button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.form-container button:hover {
+  background-color: #0069d9;
+}
+
+/* Link Styles */
+.form-container a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.form-container a:hover {
+  text-decoration: underline;
+}
+
+/* Utility Classes */
+.mt-4 {
+  margin-top: 1.5rem;
+}
