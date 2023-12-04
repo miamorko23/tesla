@@ -10,11 +10,6 @@ from django.core.paginator import Paginator
 
 
 @login_required(login_url="/login")
-def user_events(request):
-    user_events = DrowsinessEvent.objects.filter(user=request.user)
-    return render(request, 'main/user_events.html', {'user_events': user_events})
-
-@login_required(login_url="/login")
 def update_profile(request):
     if request.method == 'POST':
         form = UpdateProfileForm(request.POST, instance=request.user)
