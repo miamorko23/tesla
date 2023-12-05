@@ -52,8 +52,12 @@ def home(request):
             return render(request, 'main/superuser_dashboard.html', {'events': events, 'all_drivers': all_drivers})
         return render(request, 'main/all_user_events.html', {'events': events, 'all_drivers': all_drivers})
     else:
-        user_events = DrowsinessEvent.objects.filter(user=request.user)
-        return render(request, 'main/home.html', {'user_events': user_events})
+        user_events = DrowsinessEvent.objects.filter(user=request.user).order_by('-time')
+        # Paginate the user's events
+        paginator = Paginator(user_events, 10)  # Show 10 events per page for drivers
+        page_number = request.GET.get('page')
+        paginated_events = paginator.get_page(page_number)
+        return render(request, 'main/home.html', {'user_events': paginated_events})
 
 
 def sign_up(request):

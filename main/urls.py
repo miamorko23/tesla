@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -12,3 +14,6 @@ urlpatterns = [
     path('manager-approval', views.manager_approval, name='manager_approval'),
     path('approved-managers', views.approved_managers, name='approved_managers'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

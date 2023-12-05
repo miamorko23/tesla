@@ -21,7 +21,11 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="{% url 'home' %}">
-        ORION Solutions
+        <svg width="100%" height="100%" viewBox="0 0 220 60" preserveAspectRatio="none" style="position: absolute; top: 0; left: 0; z-index: 0;">
+          <rect x="1" y="1" width="218" height="58" fill="transparent" stroke-width="2" stroke-dasharray="6, 3" stroke="#333" class="svg-border"></rect>
+        </svg>
+        <img src="{% static 'hat.png' %}" alt="ORION Solutions Icon" style="height: 28px; margin-right: 8px; z-index: 1;">
+        <span style="z-index: 1;">ORION Solutions</span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
